@@ -8,13 +8,14 @@ import android.content.*
 import android.graphics.*
 class LineTriView(ctx : Context) : View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val renderer = Renderer(this)
     override fun onDraw(canvas : Canvas) {
-
+        renderer.render(canvas, paint)
     }
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
