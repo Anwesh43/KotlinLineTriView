@@ -75,19 +75,28 @@ class LineTriView(ctx : Context) : View(ctx) {
             paint.color = Color.parseColor("#283593")
             val w = canvas.width.toFloat()
             val h = canvas.height.toFloat()
+            canvas.save()
+            canvas.translate(w/2, h/2)
+            canvas.rotate(180f * state.scales[2])
             for(i in 0..1) {
-                canvas.save()
-                canvas.translate(w/2, h/2)
                 canvas.scale(1f, (1f - 2* i))
-                canvas.rotate(180f * state.scales[2])
                 val size = w/4 * state.scales[0]
                 val path = Path()
                 path.moveTo(-size, -h/6)
                 path.lineTo(size , -h/6)
                 path.lineTo(0f, -h/6 + (h/6) * state.scales[1])
+                if (state.j == 0) {
+                    paint.style = Paint.Style.STROKE
+                    paint.strokeWidth = size/30
+                    paint.strokeCap = Paint.Cap.ROUND
+                }
+                else {
+                    paint.style = Paint.Style.FILL
+                }
                 canvas.drawPath(path, paint)
-                canvas.restore()
+
             }
+            canvas.restore()
         }
         fun update(stopcb : (Float) -> Unit) {
             state.update(stopcb)
@@ -110,12 +119,12 @@ class LineTriView(ctx : Context) : View(ctx) {
         }
         fun handleTap() {
             lineTri.startUpdating {
-                animator.stop()
+                animator.start()
             }
         }
     }
     companion object {
-        fun render(activity : Activity) : LineTriView {
+        fun create(activity : Activity) : LineTriView {
             val view = LineTriView(activity)
             activity.setContentView(view)
             return view
