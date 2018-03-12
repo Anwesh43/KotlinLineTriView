@@ -20,7 +20,7 @@ class LineTriView(ctx : Context) : View(ctx) {
         return true
     }
     data class State(var prevScale : Float = 0f, var dir : Float = 0f, var j : Int = 0, var jdir : Int = 1) {
-        val scales : Array<Float> = arrayOf(0f, 0f)
+        val scales : Array<Float> = arrayOf(0f, 0f, 0f)
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += dir * 0.1f
             if(Math.abs(scales[j] - prevScale) > 1) {
@@ -65,6 +65,33 @@ class LineTriView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+    data class LineTri(var i : Int) {
+        val state = State()
+        fun draw(canvas : Canvas, paint : Paint) {
+            paint.color = Color.parseColor("#283593")
+            val w = canvas.width.toFloat()
+            val h = canvas.height.toFloat()
+            for(i in 0..1) {
+                canvas.save()
+                canvas.translate(w/2, h/2)
+                canvas.scale(1f, (1f - 2* i))
+                canvas.rotate(180f * state.scales[2])
+                val size = w/4 * state.scales[0]
+                val path = Path()
+                path.moveTo(-size, -h/6)
+                path.lineTo(size , -h/6)
+                path.lineTo(0f, -h/6 + (h/6) * state.scales[1])
+                canvas.drawPath(path, paint)
+                canvas.restore()
+            }
+        }
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
         }
     }
 }
