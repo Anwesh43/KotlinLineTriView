@@ -3,6 +3,7 @@ package ui.anwesome.com.linetriview
 /**
  * Created by anweshmishra on 12/03/18.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -111,6 +112,13 @@ class LineTriView(ctx : Context) : View(ctx) {
             lineTri.startUpdating {
                 animator.stop()
             }
+        }
+    }
+    companion object {
+        fun render(activity : Activity) : LineTriView {
+            val view = LineTriView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
