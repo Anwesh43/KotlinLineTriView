@@ -94,4 +94,22 @@ class LineTriView(ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+    data class Renderer(var view : LineTriView) {
+        val lineTri : LineTri = LineTri(0)
+        val animator : Animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            lineTri.draw(canvas, paint)
+            animator.animate {
+                lineTri.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            lineTri.startUpdating {
+                animator.stop()
+            }
+        }
+    }
 }
